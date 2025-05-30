@@ -5,3 +5,32 @@
 button {
     cursor: pointer;
 }
+
+/* Optional: control toast width only */
+.Toastify__toast-container {
+    position: fixed !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    left: auto !important; /* Important: prevent left-alignment */
+    bottom: auto !important; /* In case other positions were applied */
+    width: fit-content !important;
+    max-width: 300px !important;
+    z-index: 9999;
+}
+
+.Toastify__toast {
+    width: fit-content !important;
+    min-height: auto !important;
+}
+
+.Toastify__toast-icon {
+    width: 16px !important;
+    min-width: 16px !important;
+    height: 16px !important;
+    margin-right: 8px !important;
+}
+
+.Toastify__toast-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+}

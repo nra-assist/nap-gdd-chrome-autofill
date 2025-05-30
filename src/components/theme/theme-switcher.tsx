@@ -1,40 +1,7 @@
-import { useEffect, useState } from "react";
+import { useTheme } from "./theme-context.tsx";
 
 export default function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    // On mount, determine theme from localStorage or system preference
-    const storedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    const resolved = storedTheme || (prefersDark ? "dark" : "light");
-    setTheme(resolved);
-    applyTheme(resolved);
-    setMounted(true);
-  }, []);
-
-  const applyTheme = (theme: string) => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    applyTheme(newTheme);
-  };
-
-  if (!mounted) {
-    return <div className="size-11 rounded-full bg-gray-100 p-2 dark:bg-gray-900" />;
-  }
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button

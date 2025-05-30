@@ -5,10 +5,13 @@ import DividendsPage from "./pages/dividends-page.tsx";
 import SellsPage from "./pages/sales-page.tsx";
 import InterestPage from "./pages/interest-page.tsx";
 import CashbackPage from "./pages/cashback-page.tsx";
+import ThemedToastContainer from "./components/theme/themed-toast-container.tsx";
 
 export default function App() {
   return (
     <div className="bg-gray-200 dark:bg-gray-900">
+      <ThemedToastContainer />
+
       <Navbar />
 
       <Routes>
