@@ -68,11 +68,11 @@ const FillHoldingsButton: React.FC<FillHoldingsButtonProps> = ({ file }) => {
 
     const isStartingRowEmpty = (startIndex: number) => {
       const selectors = [
-        `select[name="dec50_app8_stocks_stocksenum[${startIndex}]_country"]`,
-        `input[name="dec50_app8_stocks_stocksenum[${startIndex}]_count"]`,
-        `input[name="dec50_app8_stocks_stocksenum[${startIndex}]_acquiredate"]`,
-        `input[name="dec50_app8_stocks_stocksenum[${startIndex}]_priceincurrency"]`,
-        `input[name="dec50_app8_stocks_stocksenum[${startIndex}]_price"]`,
+        `select[id="A8D1:${startIndex}_country"]`,
+        `input[id="A8D1:${startIndex}_count"]`,
+        `input[id="A8D1:${startIndex}_acquiredate"]`,
+        `input[id="A8D1:${startIndex}_priceincurrency"]`,
+        `input[id="A8D1:${startIndex}_price"]`,
       ];
       return selectors.every((selector) => {
         const el = document.querySelector(selector);
@@ -94,9 +94,7 @@ const FillHoldingsButton: React.FC<FillHoldingsButtonProps> = ({ file }) => {
 
     const updateSelect = (index: number, field: string, value: string) => {
       value = decodeURIComponent(encodeURIComponent(value));
-      const selectEl = document.querySelector<HTMLSelectElement>(
-        `select[name="dec50_app8_stocks_stocksenum[${index}]_${field}"]`,
-      );
+      const selectEl = document.querySelector<HTMLSelectElement>(`select[id="A8D1:${index}_${field}"]`);
       if (selectEl) {
         for (let i = 0; i < selectEl.options.length; i++) {
           if (selectEl.options[i].text.localeCompare(value) === 0) {
@@ -108,16 +106,12 @@ const FillHoldingsButton: React.FC<FillHoldingsButtonProps> = ({ file }) => {
     };
 
     const updateInput = (index: number, field: string, value: string) => {
-      const inputEl = document.querySelector<HTMLInputElement>(
-        `input[name="dec50_app8_stocks_stocksenum[${index}]_${field}"]`,
-      );
+      const inputEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${index}_${field}"]`);
       if (inputEl) inputEl.value = value;
     };
 
     const updateDate = (index: number, date: string) => {
-      const hiddenEl = document.querySelector<HTMLInputElement>(
-        `input[name="dec50_app8_stocks_stocksenum[${index}]_acquiredate"]`,
-      );
+      const hiddenEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${startIndex}_acquiredate"]`);
       const displayEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${index}_acquiredate_display"]`);
       if (hiddenEl && displayEl) {
         hiddenEl.value = date;
