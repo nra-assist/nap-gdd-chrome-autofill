@@ -2,10 +2,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-button {
-    cursor: pointer;
-}
-
 /* Optional: control toast width only */
 .Toastify__toast-container {
     position: fixed !important;

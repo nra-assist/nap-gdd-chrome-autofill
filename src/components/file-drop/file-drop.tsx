@@ -74,7 +74,7 @@ const FileDrop: React.FC<FileDropProps> = ({ onFileChange, maxFileSize = 50 * 10
           <button
             type="button"
             onClick={handleRemove}
-            className="flex h-5 w-5 items-center justify-center rounded-full hover:bg-gray-300 dark:hover:bg-gray-600"
+            className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full hover:bg-gray-300 dark:hover:bg-gray-600"
             title="Премахни файла"
           >
             <FaTrashCan className="text-red-600 dark:text-red-400" size="12" />

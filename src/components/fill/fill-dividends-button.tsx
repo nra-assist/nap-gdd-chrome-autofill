@@ -163,13 +163,7 @@ const FillDividendsButton: React.FC<FillDividendsButtonProps> = ({ file }) => {
       <button
         onClick={handleClick}
         disabled={isProcessing || !file}
-        className={`relative max-w-[300px] rounded px-4 py-2 font-medium text-white shadow transition-all duration-200 ${
-          isProcessing
-            ? "cursor-not-allowed bg-gray-500"
-            : !file
-              ? "cursor-not-allowed bg-gray-400"
-              : "bg-green-600 hover:bg-green-700 active:bg-green-800"
-        }`}
+        className={`max-w-[300px] rounded-sm px-4 py-2 text-sm font-medium text-white md:w-1/3 ${isProcessing ? "bg-gray-500 opacity-50" : !file ? "bg-gray-400" : "cursor-pointer bg-indigo-600 dark:bg-indigo-700"} ${!isProcessing && file ? "hover:bg-indigo-700 dark:hover:bg-indigo-600" : ""} `}
       >
         {isProcessing ? (
           <div className="flex items-center justify-center">

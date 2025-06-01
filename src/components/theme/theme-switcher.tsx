@@ -6,7 +6,7 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="flex size-6 items-center justify-center rounded-full bg-gray-200 text-gray-800 transition duration-300 ease-in-out hover:bg-gray-300/90 dark:bg-gray-700/50 dark:text-gray-300 dark:hover:bg-gray-700/80"
+      className="flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-gray-800 transition duration-300 ease-in-out hover:bg-gray-300/90 dark:bg-gray-700/50 dark:text-gray-300 dark:hover:bg-gray-700/80"
     >
       {theme === "dark" ? (
         // Sun Icon
