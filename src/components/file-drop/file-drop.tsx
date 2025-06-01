@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
 interface FileDropProps {
@@ -6,10 +6,18 @@ interface FileDropProps {
   maxFileSize?: number;
 }
 
-const FileDrop: React.FC<FileDropProps> = ({ onFileChange, maxFileSize = 50 * 1024 * 1024 }) => {
+export interface FileDropRef {
+  clearFile: () => void;
+}
+
+const FileDrop = forwardRef<FileDropRef, FileDropProps>(({ onFileChange, maxFileSize = 50 * 1024 * 1024 }, ref) => {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    clearFile,
+  }));
 
   const processFile = (selectedFile: File | null) => {
     if (!selectedFile) return;
@@ -51,6 +59,11 @@ const FileDrop: React.FC<FileDropProps> = ({ onFileChange, maxFileSize = 50 * 10
     processFile(droppedFile);
   };
 
+  const clearFile = () => {
+    setFile(null);
+    onFileChange(null);
+  };
+
   return (
     <div
       onDragOver={handleDragOver}
@@ -85,6 +98,6 @@ const FileDrop: React.FC<FileDropProps> = ({ onFileChange, maxFileSize = 50 * 10
       {error && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
-};
+});
 
 export default FileDrop;
