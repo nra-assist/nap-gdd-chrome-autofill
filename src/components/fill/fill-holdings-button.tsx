@@ -111,7 +111,7 @@ const FillHoldingsButton: React.FC<FillHoldingsButtonProps> = ({ file }) => {
     };
 
     const updateDate = (index: number, date: string) => {
-      const hiddenEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${startIndex}_acquiredate"]`);
+      const hiddenEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${index}_acquiredate"]`);
       const displayEl = document.querySelector<HTMLInputElement>(`input[id="A8D1:${index}_acquiredate_display"]`);
       if (hiddenEl && displayEl) {
         hiddenEl.value = date;
