@@ -93,7 +93,7 @@ export default function InterestsSumPage() {
               Попълване...
             </div>
           ) : (
-            "Попълни Приложение 6 Част 1 Код 603"
+            "Попълни Приложение 6 | Част 1 - Код 603"
           )}
         </button>
       </div>

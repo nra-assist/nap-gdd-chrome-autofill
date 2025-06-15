@@ -183,7 +183,7 @@ export default function DividendsPage() {
               Попълване...
             </div>
           ) : (
-            "Попълни Приложение 8 Част 3"
+            "Попълни Приложение 8 | Част 3"
           )}
         </button>
       </div>

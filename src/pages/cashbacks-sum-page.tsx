@@ -93,7 +93,7 @@ export default function CashbacksSumPage() {
               Попълване...
             </div>
           ) : (
-            "Попълни Приложение 6 Част 1 Код 606"
+            "Попълни Приложение 6 | Част 1 - Код 606"
           )}
         </button>
       </div>

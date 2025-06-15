@@ -189,7 +189,7 @@ export default function HoldingsPage() {
               Попълване...
             </div>
           ) : (
-            "Попълни Приложение 8 Част 1"
+            "Попълни Приложение 8 | Част 1"
           )}
         </button>
       </div>
