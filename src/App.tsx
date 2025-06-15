@@ -2,7 +2,7 @@ import Navbar from "./components/navbar/navbar.tsx";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HoldingsPage from "./pages/holdings-page.tsx";
 import DividendsPage from "./pages/dividends-page.tsx";
-import SellsPage from "./pages/sales-sum-page.tsx";
+import SellsPage from "./pages/unregulated-sales-sum-page.tsx";
 import InterestsSumPage from "./pages/interests-sum-page.tsx";
 import CashbacksSumPage from "./pages/cashbacks-sum-page.tsx";
 import ThemedToastContainer from "./components/theme/themed-toast-container.tsx";

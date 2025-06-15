@@ -3,16 +3,16 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { getCurrentTab } from "../services/chrome-service.tsx";
 import { Result } from "../types/result.tsx";
-import { SalesSum } from "../types/sales-sum.tsx";
+import { UnregulatedSalesSum } from "../types/unregulated-sales-sum.tsx";
 
-export default function SellsSumPage() {
+export default function UnregulatedSellsSumPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleClick = async () => {
     setIsProcessing(true);
 
-    let jsonData: SalesSum;
+    let jsonData: UnregulatedSalesSum;
     try {
       const text = await file!.text();
       jsonData = JSON.parse(text);
@@ -40,7 +40,7 @@ export default function SellsSumPage() {
       return;
     }
 
-    const response = await chrome.scripting.executeScript<[SalesSum], Result>({
+    const response = await chrome.scripting.executeScript<[UnregulatedSalesSum], Result>({
       target: { tabId: tab.id! },
       func: fillStockForm,
       args: [jsonData],
@@ -57,8 +57,8 @@ export default function SellsSumPage() {
     setIsProcessing(false);
   };
 
-  const fillStockForm = (salesSum: SalesSum): { success: boolean; error?: string; toastDuration?: number } => {
-    const updateRow = (salesSum: SalesSum) => {
+  const fillStockForm = (salesSum: UnregulatedSalesSum): { success: boolean; error?: string; toastDuration?: number } => {
+    const updateRow = (salesSum: UnregulatedSalesSum) => {
       updateSelect("code", "508");
       updateInput("sellvalue", salesSum.sellValue);
       updateInput("buyvalue", salesSum.buyValue);
