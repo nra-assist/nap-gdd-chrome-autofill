@@ -13,7 +13,6 @@ export interface FileDropRef {
 const FileDrop = forwardRef<FileDropRef, FileDropProps>(({ onFileChange, maxFileSize = 50 * 1024 * 1024 }, ref) => {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [dragOver, setDragOver] = useState(false);
 
   useImperativeHandle(ref, () => ({
     clearFile,
@@ -47,14 +46,10 @@ const FileDrop = forwardRef<FileDropRef, FileDropProps>(({ onFileChange, maxFile
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    setDragOver(true);
   };
-
-  const handleDragLeave = () => setDragOver(false);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    setDragOver(false);
     const droppedFile = e.dataTransfer.files?.[0] || null;
     processFile(droppedFile);
   };
@@ -67,16 +62,13 @@ const FileDrop = forwardRef<FileDropRef, FileDropProps>(({ onFileChange, maxFile
   return (
     <div
       onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`w-full rounded border-1 ${
-        dragOver ? "border-blue-500 bg-blue-50 dark:bg-blue-900" : "border-dashed border-gray-300 dark:border-gray-500"
-      } transition-colors`}
+      className="w-full rounded border-1 border-dashed border-gray-300 dark:border-gray-500"
     >
       {!file ? (
         <label
           htmlFor="file-input"
-          className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 p-2 text-center"
+          className="flex w-full cursor-pointer items-center justify-center p-3 text-center"
         >
           <span className="text-sm text-gray-500 dark:text-gray-300">Дръпни и пусни файл или натисни тук</span>
           <input id="file-input" type="file" className="hidden" onChange={handleFileChange} />
