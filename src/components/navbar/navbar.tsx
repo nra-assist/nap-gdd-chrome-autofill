@@ -9,7 +9,7 @@ export default function Navbar() {
   const pathname = location.pathname;
 
   return (
-    <nav className="min-w-[450px] bg-gray-100 px-2 py-2 dark:bg-gray-900">
+    <nav className="min-w-[600px] bg-gray-100 px-2 py-2 dark:bg-gray-900">
       <div className="flex items-center space-x-2">
         <Link to="/">
           <img

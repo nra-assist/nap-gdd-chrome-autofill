@@ -6,6 +6,7 @@ import SellsPage from "./pages/unregulated-sales-sum-page.tsx";
 import InterestsSumPage from "./pages/interests-sum-page.tsx";
 import CashbacksSumPage from "./pages/cashbacks-sum-page.tsx";
 import ThemedToastContainer from "./components/theme/themed-toast-container.tsx";
+import RegulatedSalesSumPage from "./pages/regulated-sales-sum-page.tsx";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/holdings" element={<HoldingsPage />} />
         <Route path="/dividends" element={<DividendsPage />} />
         <Route path="/sells" element={<SellsPage />} />
+        <Route path="/regulated-sells" element={<RegulatedSalesSumPage />} />
         <Route path="/interest" element={<InterestsSumPage />} />
         <Route path="/cashback" element={<CashbacksSumPage />} />
       </Routes>

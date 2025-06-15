@@ -100,3 +100,5 @@ export default function CashbacksSumPage() {
     </div>
   );
 }
+// dec50_app13_table2_income5081
+// dec50_app13_table2_value5081
