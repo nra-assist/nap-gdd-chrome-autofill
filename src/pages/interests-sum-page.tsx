@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { getCurrentTab } from "../services/chrome-service.tsx";
 import { Result } from "../types/result.tsx";
 
-export default function InterestPage() {
+export default function InterestsSumPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
