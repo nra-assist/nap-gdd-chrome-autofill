@@ -73,7 +73,7 @@ export default function InterestsSumPage() {
         <button
           onClick={handleClick}
           disabled={isProcessing || !file}
-          className={`max-w-[300px] min-w-[250px] rounded-sm px-4 py-1.5 text-sm font-medium text-white md:w-1/3 ${isProcessing ? "bg-gray-500 opacity-50" : !file ? "bg-gray-400" : "cursor-pointer bg-indigo-600 dark:bg-indigo-700"} ${!isProcessing && file ? "hover:bg-indigo-700 dark:hover:bg-indigo-600" : ""} `}
+          className={`max-w-[400px] min-w-[250px] rounded-sm px-4 py-1.5 text-sm font-medium text-white md:w-1/3 ${isProcessing ? "bg-gray-500 opacity-50" : !file ? "bg-gray-400" : "cursor-pointer bg-indigo-600 dark:bg-indigo-700"} ${!isProcessing && file ? "hover:bg-indigo-700 dark:hover:bg-indigo-600" : ""} `}
         >
           {isProcessing ? (
             <div className="flex items-center justify-center">
