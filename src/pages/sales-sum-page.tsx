@@ -1,9 +1,9 @@
 import FileDrop from "../components/file-drop/file-drop.tsx";
 import { useState } from "react";
-import { Dividend } from "../types/dividend.tsx";
 import { toast } from "react-toastify";
 import { getCurrentTab } from "../services/chrome-service.tsx";
 import { Result } from "../types/result.tsx";
+import { SalesSum } from "../types/sales-sum.tsx";
 
 export default function SellsSumPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -12,7 +12,7 @@ export default function SellsSumPage() {
   const handleClick = async () => {
     setIsProcessing(true);
 
-    let jsonData: Dividend[];
+    let jsonData: SalesSum;
     try {
       const text = await file!.text();
       jsonData = JSON.parse(text);
@@ -20,14 +20,14 @@ export default function SellsSumPage() {
     } catch (error) {
       console.error(error);
       toast.error(
-        "Грешка! Неуспешно прочитане на входните данни. Моля, уверете се, че изпращате правилния JSON файл 'holdings.json', генериран от Nra Assist.",
+        "Грешка! Неуспешно прочитане на входните данни. Моля, уверете се, че изпращате правилния JSON файл 'unregulated-sales-sum.json', генериран от Nra Assist.",
         { autoClose: 6000 },
       );
       setIsProcessing(false);
       return;
     }
 
-    if (!jsonData.length) {
+    if (!jsonData) {
       toast.warn("Изпратеният файл е празен!", { autoClose: 2000 });
       setIsProcessing(false);
       return;
@@ -40,7 +40,7 @@ export default function SellsSumPage() {
       return;
     }
 
-    const response = await chrome.scripting.executeScript<[Dividend[]], Result>({
+    const response = await chrome.scripting.executeScript<[SalesSum], Result>({
       target: { tabId: tab.id! },
       func: fillStockForm,
       args: [jsonData],
@@ -57,56 +57,24 @@ export default function SellsSumPage() {
     setIsProcessing(false);
   };
 
-  const fillStockForm = (data: Dividend[]): { success: boolean; error?: string; toastDuration?: number } => {
-    const getLastA8D5Index = () => {
-      const rows = document.querySelectorAll('tr[id^="A8D5:"]');
-      const lastRow = rows[rows.length - 1];
-      const parts = lastRow.id.split(":");
-      return parts.length > 1 ? parseInt(parts[1], 10) : 1;
+  const fillStockForm = (salesSum: SalesSum): { success: boolean; error?: string; toastDuration?: number } => {
+    const updateRow = (salesSum: SalesSum) => {
+      updateSelect("code", "508");
+      updateInput("sellvalue", salesSum.sellValue);
+      updateInput("buyvalue", salesSum.buyValue);
+
+      const profit = Number(salesSum.profit);
+
+      if (profit >= 0) {
+        updateInput("profit", profit.toString());
+      } else {
+        updateInput("loss", Math.abs(profit).toString());
+      }
     };
 
-    const isStartingRowEmpty = (startIndex: number) => {
-      const selectors = [
-        `input[id="A8D5:${startIndex}_name"]`,
-        `select[id="A8D5:${startIndex}_country"]`,
-        `select[id="A8D5:${startIndex}_incomecode"]`,
-        `select[id="A8D5:${startIndex}_methodcode"]`,
-        `input[id="A8D5:${startIndex}_sum"]`,
-        `input[id="A8D5:${startIndex}_value"]`,
-        `input[id="A8D5:${startIndex}_diff"]`,
-        `input[id="A8D5:${startIndex}_paidtax"]`,
-        `input[id="A8D5:${startIndex}_permitedtax"]`,
-        `input[id="A8D5:${startIndex}_tax"]`,
-        `input[id="A8D5:${startIndex}_owetax"]`,
-      ];
-      return selectors.every((selector) => {
-        const el = document.querySelector(selector);
-        return (
-          !el ||
-          (el instanceof HTMLInputElement && el.value.trim() === "") ||
-          (el instanceof HTMLSelectElement && (el.selectedIndex === -1 || el.value === ""))
-        );
-      });
-    };
-
-    const updateRow = (index: number, dividend: Dividend) => {
-      updateInput(index, "name", dividend.name);
-      updateSelect(index, "country", dividend.country);
-      updateSelect(index, "incomecode", "8141");
-      updateSelect(index, "methodcode", "1");
-      updateInput(index, "sum", dividend.sum.toString());
-      updateInput(index, "value", "0.00");
-      updateInput(index, "value", "0.00");
-      updateInput(index, "diff", "0.00");
-      updateInput(index, "paidtax", dividend.paidTax.toString());
-      updateInput(index, "permitedtax", "0.00");
-      updateInput(index, "tax", dividend.paidTax.toString());
-      updateInput(index, "owetax", "0.00");
-    };
-
-    const updateSelect = (index: number, field: string, value: string) => {
+    const updateSelect = (field: string, value: string) => {
       value = decodeURIComponent(encodeURIComponent(value));
-      const selectEl = document.querySelector<HTMLSelectElement>(`select[id="A8D5:${index}_${field}"]`);
+      const selectEl = document.querySelector<HTMLSelectElement>(`select[id="A5D2:1_${field}"]`);
       if (selectEl) {
         for (let i = 0; i < selectEl.options.length; i++) {
           if (selectEl.options[i].text.localeCompare(value) === 0) {
@@ -117,41 +85,20 @@ export default function SellsSumPage() {
       }
     };
 
-    const updateInput = (index: number, field: string, value: string) => {
-      const inputEl = document.querySelector<HTMLInputElement>(`input[id="A8D5:${index}_${field}"]`);
+    const updateInput = (field: string, value: string) => {
+      const inputEl = document.querySelector<HTMLInputElement>(`input[id="A5D2:1_${field}"]`);
       if (inputEl) inputEl.value = value;
     };
 
-    if (!document.querySelector('tr[id="A8D5:1"]')) {
+    if (!document.querySelector('tr[id="A5D2:1"]')) {
       return {
         success: false,
-        error: "Грешка! Моля, отидете на таба с Приложение 8 от ГДД към НАП!",
+        error: "Грешка! Моля, отидете на таба с Приложение 5 от ГДД към НАП!",
         toastDuration: 3000,
       };
     }
 
-    const addRowButton = Array.from(document.querySelectorAll<HTMLButtonElement>("button#A8D5"))[1];
-    if (!addRowButton) {
-      return {
-        success: false,
-        error:
-          "Грешка! Текущата версия на разширението не работи с последната версия на сайта на НАП. Моля, съвржете се с нас!",
-        toastDuration: 6000,
-      };
-    }
-
-    let startIndex = getLastA8D5Index();
-    const startingRowEmpty = isStartingRowEmpty(startIndex);
-
-    if (startingRowEmpty) {
-      updateRow(startIndex, data[0]);
-    }
-
-    startIndex++;
-    data.slice(startingRowEmpty ? 1 : 0).forEach((dividend, i) => {
-      addRowButton.click();
-      updateRow(startIndex + i, dividend);
-    });
+    updateRow(salesSum);
 
     return { success: true };
   };
@@ -183,7 +130,7 @@ export default function SellsSumPage() {
               Попълване...
             </div>
           ) : (
-            "Попълни Приложение 8 Част 3"
+            "Попълни Приложение 5 Част 1 Таблица 2"
           )}
         </button>
       </div>
