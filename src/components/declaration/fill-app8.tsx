@@ -1,10 +1,9 @@
 import { Holding } from "../../types/holding.tsx";
-import { Result } from "../../types/result.tsx";
 import { Dividend } from "../../types/dividend.tsx";
 import { StockData } from "../../types/stock-data.tsx";
 
-const fillApp8 = async (tabId: number, stockData: StockData): Promise<Result> => {
-  const fillApp8Internal = (stockData: StockData): Result => {
+const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
+  const fillApp8Internal = (stockData: StockData): void => {
     // HELPERS
     const getLastRowIndex = (prefix: string): number => {
       const rows = document.querySelectorAll(`tr[id^="${prefix}:"]`);
@@ -60,15 +59,8 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<Result> =>
     };
 
     // HOLDINGS
-    const fillHoldings = (holdings: Holding[]): Result => {
+    const fillHoldings = (holdings: Holding[]): void => {
       const addRowButton = document.querySelectorAll<HTMLButtonElement>("button#A8D1")[1];
-      if (!addRowButton) {
-        return {
-          success: false,
-          error: "Грешка! Разширението не е съвместимо с последната версия на сайта на НАП. Свържете се с нас!",
-          toastDuration: 6000,
-        };
-      }
 
       let row = getLastRowIndex("A8D1");
       const empty = isRowEmpty("A8D1", row, ["country", "count", "acquiredate", "priceincurrency", "price"]);
@@ -94,20 +86,11 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<Result> =>
         addRowButton.click();
         updateRow(row + i, h);
       });
-
-      return { success: true };
     };
 
     // DIVIDENDS
-    const fillDividends = (dividends: Dividend[]): Result => {
+    const fillDividends = (dividends: Dividend[]): void => {
       const addRowButton = document.querySelectorAll<HTMLButtonElement>("button#A8D5")[1];
-      if (!addRowButton) {
-        return {
-          success: false,
-          error: "Грешка! Разширението не е съвместимо с последната версия на сайта на НАП. Свържете се с нас!",
-          toastDuration: 6000,
-        };
-      }
 
       let row = getLastRowIndex("A8D5");
       const empty = isRowEmpty("A8D5", row, [
@@ -147,8 +130,6 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<Result> =>
         addRowButton.click();
         updateRow(row + i, d);
       });
-
-      return { success: true };
     };
 
     // APP 8 INTERNAL
@@ -157,39 +138,29 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<Result> =>
     anchor.click();
 
     if (stockData.holdings) {
-      const holdingsResult = fillHoldings(stockData.holdings);
-      if (!holdingsResult.success) {
-        return holdingsResult;
-      }
+      fillHoldings(stockData.holdings);
     }
 
     if (stockData.dividends) {
-      const dividendsResult = fillDividends(stockData.dividends);
-      if (!dividendsResult.success) {
-        return dividendsResult;
-      }
+      fillDividends(stockData.dividends);
     }
 
     const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
     confirmButton?.click();
-
-    return { success: true };
   };
 
   // APP 8
   if (!stockData.holdings && !stockData.dividends) {
-    return { success: true };
+    return;
   }
 
-  const [result] = await chrome.scripting.executeScript<[StockData], Result>({
+  await chrome.scripting.executeScript<[StockData], void>({
     target: { tabId },
     func: fillApp8Internal,
     args: [stockData],
   });
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  return result.result!;
 };
 
 export default fillApp8;

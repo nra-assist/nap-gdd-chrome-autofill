@@ -1,8 +1,7 @@
-import { Result } from "../../types/result.tsx";
 import { StockData } from "../../types/stock-data.tsx";
 
-const fillApp5 = async (tabId: number, stockData: StockData): Promise<Result> => {
-  const fillApp5Internal = (stockData: StockData): Result => {
+const fillApp5 = async (tabId: number, stockData: StockData): Promise<void> => {
+  const fillApp5Internal = (stockData: StockData): void => {
     // HELPERS
     const updateSelect = (name: string, value: string) => {
       value = decodeURIComponent(encodeURIComponent(value));
@@ -51,24 +50,20 @@ const fillApp5 = async (tabId: number, stockData: StockData): Promise<Result> =>
 
     const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
     confirmButton?.click();
-
-    return { success: true };
   };
 
   // APP 5
   if (!stockData.unregulatedSellsSum) {
-    return { success: true };
+    return;
   }
 
-  const [result] = await chrome.scripting.executeScript<[StockData], Result>({
+  await chrome.scripting.executeScript<[StockData], void>({
     target: { tabId },
     func: fillApp5Internal,
     args: [stockData],
   });
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  return result.result!;
 };
 
 export default fillApp5;

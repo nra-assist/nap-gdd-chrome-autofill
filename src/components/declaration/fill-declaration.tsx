@@ -5,6 +5,7 @@ import fillApp8 from "./fill-app8.tsx";
 import fillApp5 from "./fill-app5.tsx";
 import fillApp13 from "./fill-app13.tsx";
 import fillApp6 from "./fill-app6.tsx";
+import fillPart3 from "./fill-part3.tsx";
 
 export async function fillDeclaration(
   file: File,
@@ -34,33 +35,11 @@ export async function fillDeclaration(
     return;
   }
 
-  let result = await fillApp8(tab.id!, stockData);
-  if (result.error) {
-    toast.error(result.error, { autoClose: result.toastDuration });
-    setIsProcessing(false);
-    return;
-  }
-
-  result = await fillApp5(tab.id!, stockData);
-  if (result.error) {
-    toast.error(result.error, { autoClose: result.toastDuration });
-    setIsProcessing(false);
-    return;
-  }
-
-  result = await fillApp13(tab.id!, stockData);
-  if (result.error) {
-    toast.error(result.error, { autoClose: result.toastDuration });
-    setIsProcessing(false);
-    return;
-  }
-
-  result = await fillApp6(tab.id!, stockData);
-  if (result.error) {
-    toast.error(result.error, { autoClose: result.toastDuration });
-    setIsProcessing(false);
-    return;
-  }
+  await fillPart3(tab.id!, stockData);
+  await fillApp8(tab.id!, stockData);
+  await fillApp5(tab.id!, stockData);
+  await fillApp13(tab.id!, stockData);
+  await fillApp6(tab.id!, stockData);
 
   toast.success("Данните са добавени успешно!", { autoClose: 2000 });
   clearUploadedFile();
