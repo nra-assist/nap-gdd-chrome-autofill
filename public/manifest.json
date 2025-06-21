@@ -2,7 +2,12 @@
   "manifest_version": 3,
   "name": "Nra Assist",
   "version": "1.0",
-  "permissions": ["scripting", "tabs", "activeTab"],
+  "permissions": [
+    "scripting",
+    "tabs",
+    "activeTab",
+    "debugger"
+  ],
   "description": "Това разширение попълва годишната данъчна декларация към НАП автоматично, използвайки входни данни от Nra Assist.",
   "host_permissions": [
     "https://portal.nra.bg/*"
