@@ -106,8 +106,8 @@ const FileDrop = forwardRef<FileDropRef, FileDropProps>(
     return (
       <div>
         <div
-          className={`w-full rounded border border-dashed border-gray-300 bg-gray-50 dark:border-gray-400 dark:bg-gray-900 ${
-            isDragging ? "bg-gray-700" : ""
+          className={`w-full rounded border border-dashed border-gray-300 bg-gray-50 dark:border-gray-400 ${
+            isDragging ? "bg-gray-100 dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-900"
           }`}
           onDragEnter={handleDragEnter}
           onDragOver={handleDragOver}

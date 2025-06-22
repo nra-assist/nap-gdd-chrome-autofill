@@ -4,7 +4,7 @@ import DeclarationFillerPage from "./pages/declaration-filler-page.tsx";
 
 export default function App() {
   return (
-    <div className="bg-gray-200 dark:bg-gray-900">
+    <div className=" dark:bg-gray-900">
       <ThemedToastContainer />
       <Navbar />
       <DeclarationFillerPage />

@@ -5,7 +5,7 @@ import ThemeSwitcher from "../theme/theme-switcher.tsx";
 
 export default function Navbar() {
   return (
-    <nav className="min-w-[570px] bg-gray-100 px-2 py-2 dark:bg-gray-900">
+    <nav className="min-w-[570px] px-2 py-2 dark:bg-gray-900">
       <div className="flex items-center justify-between">
         <Link to="/">
           <img
