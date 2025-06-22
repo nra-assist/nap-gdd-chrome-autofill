@@ -40,25 +40,45 @@ const fillApp6 = async (tabId: number, stockData: StockData): Promise<void> => {
   }
 
   // Autoclose popup
-  chrome.debugger.attach({ tabId }, "1.3", () => {
-    chrome.debugger.sendCommand({ tabId }, "Page.enable");
-    chrome.debugger.sendCommand({ tabId }, "Runtime.enable");
+  const debuggee = { tabId };
+  const onDialog = (
+    source: chrome.debugger.Debuggee,
+    method: string
+  ) => {
+    if (source.tabId === tabId && method === "Page.javascriptDialogOpening") {
+      chrome.debugger.sendCommand(
+        debuggee,
+        "Page.handleJavaScriptDialog",
+        { accept: true }
+      );
+    }
+  };
 
-    chrome.debugger.onEvent.addListener((source, method) => {
-      if (source.tabId === tabId && method === "Page.javascriptDialogOpening") {
-        // Accept the dialog automatically
-        chrome.debugger.sendCommand({ tabId }, "Page.handleJavaScriptDialog", { accept: true });
-      }
+  try {
+    await new Promise<void>((resolve, reject) => {
+      chrome.debugger.attach(debuggee, "1.3", () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+          return;
+        }
+        chrome.debugger.sendCommand(debuggee, "Page.enable");
+        chrome.debugger.sendCommand(debuggee, "Runtime.enable");
+        chrome.debugger.onEvent.addListener(onDialog);
+        resolve();
+      });
     });
-  });
 
-  await chrome.scripting.executeScript<[StockData], void>({
-    target: { tabId },
-    func: fillApp6Internal,
-    args: [stockData],
-  });
+    await chrome.scripting.executeScript<[StockData], void>({
+      target: { tabId },
+      func: fillApp6Internal,
+      args: [stockData],
+    });
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } finally {
+    chrome.debugger.onEvent.removeListener(onDialog);
+    chrome.debugger.detach(debuggee);
+  }
 };
 
 export default fillApp6;
