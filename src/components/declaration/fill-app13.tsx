@@ -13,8 +13,8 @@ const fillApp13 = async (tabId: number, stockData: StockData): Promise<void> => 
     const anchor = item.querySelector("a")!;
     anchor.click();
 
-    updateInput("dec50_app13_table2_income5081", stockData.regulatedSellsSum.sellValue);
-    updateInput("dec50_app13_table2_value5081", stockData.regulatedSellsSum.buyValue);
+    updateInput("dec50_app13_table2_income5081", stockData.regulatedSellsSum!.sellValue);
+    updateInput("dec50_app13_table2_value5081", stockData.regulatedSellsSum!.buyValue);
 
     const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
     confirmButton?.click();

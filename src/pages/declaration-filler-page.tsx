@@ -1,29 +1,29 @@
-import FileDrop, { FileDropRef } from "../components/file-drop/file-drop.tsx";
 import { useRef, useState } from "react";
 import { fillDeclaration } from "../components/declaration/fill-declaration.tsx";
+import FileDrop, {FileDropRef} from "../components/file-drop/file-drop.tsx";
 
 export default function DeclarationFillerPage() {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileDropRef = useRef<FileDropRef>(null);
 
   const handleClick = async () => {
-    if (!file) return;
-    await fillDeclaration(file, clearUploadedFile, setIsProcessing);
+    if (!files) return;
+    await fillDeclaration(files, clearUploadedFile, setIsProcessing);
   };
 
   function clearUploadedFile() {
-    fileDropRef.current?.clearFile();
+    fileDropRef.current?.clearFiles();
   }
 
   return (
     <div className="flex flex-col gap-2 p-2">
-      <FileDrop ref={fileDropRef} onFileChange={setFile} />
+      <FileDrop ref={fileDropRef} onFilesChange={setFiles} />
       <div className="flex flex-col items-center">
         <button
           onClick={handleClick}
-          disabled={isProcessing || !file}
-          className={`max-w-[400px] min-w-[250px] rounded-sm px-4 py-1.5 text-sm font-medium text-white md:w-1/3 ${isProcessing ? "bg-gray-500 opacity-50" : !file ? "bg-gray-400" : "cursor-pointer bg-indigo-600 dark:bg-indigo-700"} ${!isProcessing && file ? "hover:bg-indigo-700 dark:hover:bg-indigo-600" : ""}`}
+          disabled={isProcessing || !files}
+          className={`max-w-[400px] min-w-[250px] rounded-sm px-4 py-1.5 text-sm font-medium text-white md:w-1/3 ${isProcessing ? "bg-gray-500 opacity-50" : !files ? "bg-gray-400" : "cursor-pointer bg-indigo-600 dark:bg-indigo-700"} ${!isProcessing && files ? "hover:bg-indigo-700 dark:hover:bg-indigo-600" : ""}`}
           aria-live="polite"
         >
           {isProcessing ? (

@@ -27,10 +27,10 @@ const fillApp5 = async (tabId: number, stockData: StockData): Promise<void> => {
     anchor.click();
 
     updateSelect("dec50_app5_table2_rowenum[1]_code", "508");
-    updateInput("dec50_app5_table2_rowenum[1]_sellvalue", stockData.unregulatedSellsSum.sellValue);
-    updateInput("dec50_app5_table2_rowenum[1]_buyvalue", stockData.unregulatedSellsSum.buyValue);
+    updateInput("dec50_app5_table2_rowenum[1]_sellvalue", stockData.unregulatedSellsSum!.sellValue);
+    updateInput("dec50_app5_table2_rowenum[1]_buyvalue", stockData.unregulatedSellsSum!.buyValue);
 
-    const profit = Number(stockData.unregulatedSellsSum.profit);
+    const profit = Number(stockData.unregulatedSellsSum!.profit);
     if (profit >= 0) {
       updateInput("dec50_app5_table2_rowenum[1]_profit", profit.toString());
       updateInput("dec50_app5_t2row4pr", profit.toString());
