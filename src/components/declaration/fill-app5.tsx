@@ -22,9 +22,10 @@ const fillApp5 = async (tabId: number, stockData: StockData): Promise<void> => {
     };
 
     // APP 5 INTERNAL
-    const item = document.getElementById("part_1229")!;
-    const anchor = item.querySelector("a")!;
-    anchor.click();
+    const app5Anchor = Array.from(document.querySelectorAll<HTMLAnchorElement>("li > a.item")).find(
+      (a) => a.textContent?.trim() === "Приложение 5",
+    );
+    app5Anchor?.click();
 
     updateSelect("dec50_app5_table2_rowenum[1]_code", "508");
     updateInput("dec50_app5_table2_rowenum[1]_sellvalue", stockData.unregulatedSellsSum!.sellValue);
@@ -53,7 +54,10 @@ const fillApp5 = async (tabId: number, stockData: StockData): Promise<void> => {
   };
 
   // APP 5
-  if (!stockData.unregulatedSellsSum) {
+  if (
+    (stockData.unregulatedSellsSum?.buyValue === "0" && stockData.unregulatedSellsSum?.sellValue === "0") ||
+    stockData.unregulatedSellsSum?.profit === "0"
+  ) {
     return;
   }
 

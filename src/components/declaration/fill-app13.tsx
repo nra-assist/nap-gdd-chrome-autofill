@@ -9,9 +9,10 @@ const fillApp13 = async (tabId: number, stockData: StockData): Promise<void> => 
     };
 
     // APP 13 INTERNAL
-    const item = document.getElementById("part_1237")!;
-    const anchor = item.querySelector("a")!;
-    anchor.click();
+    const app13Anchor = Array.from(document.querySelectorAll<HTMLAnchorElement>("li > a.item")).find(
+      (a) => a.textContent?.trim() === "Приложение 13",
+    );
+    app13Anchor?.click();
 
     updateInput("dec50_app13_table2_income5081", stockData.regulatedSellsSum!.sellValue);
     updateInput("dec50_app13_table2_value5081", stockData.regulatedSellsSum!.buyValue);
@@ -21,9 +22,10 @@ const fillApp13 = async (tabId: number, stockData: StockData): Promise<void> => 
   };
 
   // APP 13
-  if (!stockData.regulatedSellsSum) {
+  if (stockData.regulatedSellsSum?.buyValue === "0" && stockData.regulatedSellsSum?.sellValue === "0") {
     return;
   }
+
 
   await chrome.scripting.executeScript<[StockData], void>({
     target: { tabId },

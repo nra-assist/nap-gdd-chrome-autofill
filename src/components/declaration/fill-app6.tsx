@@ -10,9 +10,10 @@ const fillApp6 = async (tabId: number, stockData: StockData): Promise<void> => {
       }
     };
 
-    const item = document.getElementById("part_1230")!;
-    const anchor = item.querySelector("a")!;
-    anchor.click();
+    const app6Anchor = Array.from(document.querySelectorAll<HTMLAnchorElement>("li > a.item")).find(
+      (a) => a.textContent?.trim() === "Приложение 6",
+    );
+    app6Anchor?.click();
 
     let totalSum = 0;
     if (stockData.interestsSum) {

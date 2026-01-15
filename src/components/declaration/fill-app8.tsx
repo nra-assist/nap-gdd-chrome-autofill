@@ -3,6 +3,7 @@ import { Dividend } from "../../types/dividend.tsx";
 import { StockData } from "../../types/stock-data.tsx";
 
 const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
+  console.error("FILLING APP 8");
   const fillApp8Internal = (stockData: StockData): void => {
     // HELPERS
     const getLastRowIndex = (prefix: string): number => {
@@ -133,9 +134,10 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
     };
 
     // APP 8 INTERNAL
-    const item = document.getElementById("part_1232")!;
-    const anchor = item.querySelector("a")!;
-    anchor.click();
+    const app8Anchor = Array.from(document.querySelectorAll<HTMLAnchorElement>("li > a.item")).find(
+      (a) => a.textContent?.trim() === "Приложение 8",
+    );
+    app8Anchor?.click();
 
     if (stockData.holdings) {
       fillHoldings(stockData.holdings);

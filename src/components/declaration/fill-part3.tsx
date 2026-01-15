@@ -12,19 +12,20 @@ const fillPart3 = async (tabId: number, stockData: StockData): Promise<void> => 
     };
 
     // PART 3 INTERNAL
-    const item = document.getElementById("part_1222")!;
-    const anchor = item.querySelector("a")!;
-    anchor.click();
+    const part3Anchor = Array.from(document.querySelectorAll<HTMLAnchorElement>("li > a.item")).find(
+      (a) => a.textContent?.trim() === "Част III",
+    );
+    part3Anchor?.click();
 
     if (stockData.holdings || stockData.dividends) {
       setCheckboxToChecked("dec50_part3_issetapp8");
     }
 
-    if (stockData.unregulatedSellsSum) {
+    if (stockData.unregulatedSellsSum?.buyValue !== "0" || stockData.unregulatedSellsSum?.sellValue !== "0" || stockData.unregulatedSellsSum?.profit !== "0") {
       setCheckboxToChecked("dec50_part3_issetapp5");
     }
 
-    if (stockData.regulatedSellsSum) {
+    if (stockData.regulatedSellsSum?.buyValue !== "0" || stockData.regulatedSellsSum?.sellValue !== "0") {
       setCheckboxToChecked("dec50_part3_issetapp13");
     }
 
