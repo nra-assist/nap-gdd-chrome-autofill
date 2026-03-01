@@ -47,6 +47,7 @@ const fillApp5 = async (tabId: number, stockData: StockData): Promise<void> => {
     } else {
       const loss = Math.abs(profit);
       updateInput("dec50_app5_table2_rowenum[1]_loss", loss.toString());
+      updateInput("dec50_app5_t2row4ls", loss.toString());
     }
 
     const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
