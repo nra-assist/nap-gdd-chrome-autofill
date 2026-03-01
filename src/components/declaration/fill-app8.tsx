@@ -4,7 +4,7 @@ import { StockData } from "../../types/stock-data.tsx";
 
 const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
   console.error("FILLING APP 8");
-  const fillApp8Internal = (stockData: StockData): void => {
+  const fillApp8Internal = async (stockData: StockData): Promise<void> => {
     // HELPERS
     const getLastRowIndex = (prefix: string): number => {
       const rows = document.querySelectorAll(`tr[id^="${prefix}:"]`);
@@ -60,7 +60,7 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
     };
 
     // HOLDINGS
-    const fillHoldings = (holdings: Holding[]): void => {
+    const fillHoldings = async (holdings: Holding[]): Promise<void> => {
       const addRowButton = document.querySelectorAll<HTMLButtonElement>("button#A8D1")[1];
 
       let row = getLastRowIndex("A8D1");
@@ -80,17 +80,24 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
 
       if (empty) {
         updateRow(row, holdings[0]);
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
 
       row++;
-      holdings.slice(empty ? 1 : 0).forEach((h, i) => {
+      const remainingHoldings = holdings.slice(empty ? 1 : 0);
+
+      for (let i = 0; i < remainingHoldings.length; i++) {
         addRowButton.click();
-        updateRow(row + i, h);
-      });
+        await new Promise(resolve => setTimeout(resolve, 50));
+        updateRow(row + i, remainingHoldings[i]);
+        if (i % 10 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
     };
 
     // DIVIDENDS
-    const fillDividends = (dividends: Dividend[]): void => {
+    const fillDividends = async (dividends: Dividend[]): Promise<void> => {
       const addRowButton = document.querySelectorAll<HTMLButtonElement>("button#A8D5")[1];
 
       let row = getLastRowIndex("A8D5");
@@ -124,13 +131,20 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
 
       if (empty) {
         updateRow(row, dividends[0]);
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
 
       row++;
-      dividends.slice(empty ? 1 : 0).forEach((d, i) => {
+      const remainingDividends = dividends.slice(empty ? 1 : 0);
+
+      for (let i = 0; i < remainingDividends.length; i++) {
         addRowButton.click();
-        updateRow(row + i, d);
-      });
+        await new Promise(resolve => setTimeout(resolve, 50));
+        updateRow(row + i, remainingDividends[i]);
+        if (i % 10 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
     };
 
     // APP 8 INTERNAL
@@ -140,15 +154,17 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
     app8Anchor?.click();
 
     if (stockData.holdings) {
-      fillHoldings(stockData.holdings);
+      await fillHoldings(stockData.holdings);
     }
 
     if (stockData.dividends) {
-      fillDividends(stockData.dividends);
+      await fillDividends(stockData.dividends);
     }
 
-    const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
-    confirmButton?.click();
+    setTimeout(() => {
+      const confirmButton = document.querySelector<HTMLInputElement>("#bottomNav .rightbtn");
+      confirmButton?.click();
+    }, 2000);
   };
 
   // APP 8
@@ -162,7 +178,7 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
     args: [stockData],
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 };
 
 export default fillApp8;
