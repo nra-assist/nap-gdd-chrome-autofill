@@ -72,6 +72,7 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
       return {
         holdings: safeMergeArrays(prev.holdings, curr.holdings),
         dividends: safeMergeArrays(prev.dividends, curr.dividends),
+        mergers: safeMergeArrays(prev.mergers, curr.mergers),
         unregulatedSellsSum: safeMergeUnregulatedSellsSum(prev.unregulatedSellsSum, curr.unregulatedSellsSum),
         regulatedSellsSum: safeMergeRegulatedSellsSum(prev.regulatedSellsSum, curr.regulatedSellsSum),
         interestsSum: safeSumStringNumbers(prev.interestsSum, curr.interestsSum),
@@ -81,6 +82,7 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
     {
       holdings: undefined,
       dividends: undefined,
+      mergers: undefined,
       unregulatedSellsSum: undefined,
       regulatedSellsSum: undefined,
       interestsSum: undefined,
