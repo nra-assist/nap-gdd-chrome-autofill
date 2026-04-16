@@ -91,14 +91,7 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
   );
 }
 
-export async function fillDeclaration(
-  files: File[],
-  clearUploadedFile: () => void,
-  setIsProcessing: (val: boolean) => void,
-) {
-  setIsProcessing(true);
-
-  let stockDataList: StockData[];
+async function parseStockData(files: File[]): Promise<StockData | null> {
   try {
     const parsedList = await Promise.all(
       files.map(async (file) => {
@@ -112,31 +105,171 @@ export async function fillDeclaration(
       }),
     );
 
-    stockDataList = parsedList.filter((data): data is StockData => data !== undefined);
+    const stockDataList = parsedList.filter((data): data is StockData => data !== undefined);
+    return mergeStockData(stockDataList);
   } catch (error) {
     console.error(error);
     toast.error(
       "Грешка! Неуспешно прочитане на входните данни. Моля, уверете се, че изпращате правилни JSON файлове 'nra-assist.json', генерирани от Nra Assist.",
       { autoClose: 6000 },
     );
-    setIsProcessing(false);
-    return;
+    return null;
   }
+}
 
-  const stockData = mergeStockData(stockDataList);
-
+async function getNapTab(): Promise<number | null> {
   const tab = await getCurrentTab();
   if (!tab.url!.startsWith("https://portal.nra.bg/")) {
     toast.error("Грешка! Моля, отидете на таба с ГДД към НАП!", { autoClose: 3000 });
+    return null;
+  }
+  return tab.id!;
+}
+
+export async function fillPart3Only(
+  files: File[],
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
     setIsProcessing(false);
     return;
   }
 
-  await fillPart3(tab.id!, stockData);
-  await fillApp8(tab.id!, stockData);
-  await fillApp5(tab.id!, stockData);
-  await fillApp13(tab.id!, stockData);
-  await fillApp6(tab.id!, stockData);
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillPart3(tabId, stockData);
+
+  toast.success("Приложение 3 е попълнено успешно!", { autoClose: 2000 });
+  setIsProcessing(false);
+}
+
+export async function fillApp8Only(
+  files: File[],
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
+    setIsProcessing(false);
+    return;
+  }
+
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillApp8(tabId, stockData);
+
+  toast.success("Приложение 8 е попълнено успешно!", { autoClose: 2000 });
+  setIsProcessing(false);
+}
+
+export async function fillApp5Only(
+  files: File[],
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
+    setIsProcessing(false);
+    return;
+  }
+
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillApp5(tabId, stockData);
+
+  toast.success("Приложение 5 е попълнено успешно!", { autoClose: 2000 });
+  setIsProcessing(false);
+}
+
+export async function fillApp13Only(
+  files: File[],
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
+    setIsProcessing(false);
+    return;
+  }
+
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillApp13(tabId, stockData);
+
+  toast.success("Приложение 13 е попълнено успешно!", { autoClose: 2000 });
+  setIsProcessing(false);
+}
+
+export async function fillApp6Only(
+  files: File[],
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
+    setIsProcessing(false);
+    return;
+  }
+
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillApp6(tabId, stockData);
+
+  toast.success("Приложение 6 е попълнено успешно!", { autoClose: 2000 });
+  setIsProcessing(false);
+}
+
+export async function fillDeclaration(
+  files: File[],
+  clearUploadedFile: () => void,
+  setIsProcessing: (val: boolean) => void,
+) {
+  setIsProcessing(true);
+
+  const stockData = await parseStockData(files);
+  if (!stockData) {
+    setIsProcessing(false);
+    return;
+  }
+
+  const tabId = await getNapTab();
+  if (!tabId) {
+    setIsProcessing(false);
+    return;
+  }
+
+  await fillPart3(tabId, stockData);
+  await fillApp8(tabId, stockData);
+  await fillApp5(tabId, stockData);
+  await fillApp13(tabId, stockData);
+  await fillApp6(tabId, stockData);
 
   toast.success("Данните са добавени успешно!", { autoClose: 2000 });
   clearUploadedFile();
