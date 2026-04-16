@@ -87,8 +87,8 @@ export default function DeclarationFillerPage() {
             <button
               key={btn.label}
               onClick={btn.handler}
-              disabled={isProcessing || !files}
-              className={getButtonClasses(btn.variant, isProcessing || !files)}
+              disabled={isProcessing || !files || files.length === 0}
+              className={getButtonClasses(btn.variant, isProcessing || !files || files.length === 0)}
             >
               {isProcessing && btn.label === "Попълни всички" ? (
                 <span className="flex items-center justify-center gap-1">
