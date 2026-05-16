@@ -186,16 +186,16 @@ const fillApp8 = async (tabId: number, stockData: StockData): Promise<void> => {
         updateSelect(`dec50_app8_part38al58_rowenum[${row}]_country`, m.targetCountry);
         updateSelect(`dec50_app8_part38al58_rowenum[${row}]_incomecode`, "815");
         updateSelect(`dec50_app8_part38al58_rowenum[${row}]_methodcode`, "3");
-        updateInput(`dec50_app8_part38al58_rowenum[${row}]_sum`, m.targetPriceInBgn);
-        updateInput(`dec50_app8_part38al58_rowenum[${row}]_value`, m.sourceCostPriceInBgn);
+        updateInput(`dec50_app8_part38al58_rowenum[${row}]_sum`, m.targetPriceInEur);
+        updateInput(`dec50_app8_part38al58_rowenum[${row}]_value`, m.sourceCostPriceInEur);
         updateInput(`dec50_app8_part38al58_rowenum[${row}]_diff`, "0.00");
         updateInput(`dec50_app8_part38al58_rowenum[${row}]_paidtax`, "0.00");
         updateInput(`dec50_app8_part38al58_rowenum[${row}]_permitedtax`, "0.00");
         updateInput(`dec50_app8_part38al58_rowenum[${row}]_tax`, "0.00");
 
         // Calculate positive difference and tax
-        const targetPrice = parseFloat(m.targetPriceInBgn);
-        const sourcePrice = parseFloat(m.sourceCostPriceInBgn);
+        const targetPrice = parseFloat(m.targetPriceInEur);
+        const sourcePrice = parseFloat(m.sourceCostPriceInEur);
         const diff = targetPrice - sourcePrice;
         const positiveDiff = diff > 0 ? diff : 0;
         const tax = positiveDiff * 0.1; // 10% tax

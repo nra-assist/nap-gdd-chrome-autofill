@@ -93,6 +93,9 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
 
 async function parseStockData(files: File[]): Promise<StockData | null> {
   try {
+    const unreadableFiles: string[] = [];
+    const invalidJsonFiles: string[] = [];
+
     const parsedList = await Promise.all(
       files.map(async (file) => {
         try {
@@ -100,12 +103,39 @@ async function parseStockData(files: File[]): Promise<StockData | null> {
           return JSON.parse(text) as StockData;
         } catch (err) {
           console.error(`Failed to parse ${file.name}:`, err);
+
+          if (err instanceof DOMException && err.name === "NotReadableError") {
+            unreadableFiles.push(file.name);
+          } else {
+            invalidJsonFiles.push(file.name);
+          }
+
           return undefined;
         }
       }),
     );
 
     const stockDataList = parsedList.filter((data): data is StockData => data !== undefined);
+
+    if (unreadableFiles.length > 0) {
+      toast.error(
+        `Грешка! Неуспешно прочитане на файл: ${unreadableFiles.join(", ")}. Ако файлът е влачен директно от ZIP архив, първо го разархивирайте и после го качете от нормална папка.`,
+        { autoClose: 7000 },
+      );
+      return null;
+    }
+
+    if (stockDataList.length === 0) {
+      const invalidFilesSuffix =
+        invalidJsonFiles.length > 0 ? ` Проблемни файлове: ${invalidJsonFiles.join(", ")}.` : "";
+
+      toast.error(
+        `Грешка! Неуспешно прочитане на входните данни. Моля, качете валидни JSON файлове 'nra-assist.json', генерирани от Nra Assist.${invalidFilesSuffix}`,
+        { autoClose: 7000 },
+      );
+      return null;
+    }
+
     return mergeStockData(stockDataList);
   } catch (error) {
     console.error(error);
