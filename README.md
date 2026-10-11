@@ -85,6 +85,11 @@ The extension expects JSON files with the following structure:
     "buyValue": "3000.00",
     "profit": "2000.00"
   },
+  "cryptoSellsSum": {
+    "sellValue": "1000.00",
+    "buyValue": "800.00",
+    "profit": "200.00"
+  },
   "regulatedSellsSum": {
     "sellValue": "10000.00",
     "buyValue": "8000.00"
@@ -116,7 +121,12 @@ The extension expects JSON files with the following structure:
     - `sourceCostPriceInEur`: Cost basis in EUR
     - `targetPriceInEur`: Acquisition price in EUR
 
-- **unregulatedSellsSum**: Summary of unregulated market sales
+- **unregulatedSellsSum**: Summary of unregulated market sales (other financial assets, reported under code 508)
+    - `sellValue`: Total sell value
+    - `buyValue`: Total buy value
+    - `profit`: Calculated profit
+
+- **cryptoSellsSum**: Summary of virtual currency sales (reported under code 5082, entered as a separate row in Приложение 5, Таблица 2)
     - `sellValue`: Total sell value
     - `buyValue`: Total buy value
     - `profit`: Calculated profit
