@@ -7,6 +7,7 @@ import fillApp13 from "./fill-app13.tsx";
 import fillApp6 from "./fill-app6.tsx";
 import fillPart3 from "./fill-part3.tsx";
 import { UnregulatedSellsSum } from "../../types/unregulated-sells-sum.tsx";
+import { CryptoSellsSum } from "../../types/cryptoSells-sum.tsx";
 import { RegulatedSellsSum } from "../../types/regulated-sells-sum.tsx";
 
 function safeSumStringNumbers(a: string | undefined, b: string | undefined): string | undefined {
@@ -27,6 +28,25 @@ function safeMergeUnregulatedSellsSum(
   }
 
   const defaultSellsSum: UnregulatedSellsSum = { sellValue: "0", buyValue: "0", profit: "0" };
+  const valA = a || defaultSellsSum;
+  const valB = b || defaultSellsSum;
+
+  return {
+    sellValue: safeSumStringNumbers(valA.sellValue, valB.sellValue)!,
+    buyValue: safeSumStringNumbers(valA.buyValue, valB.buyValue)!,
+    profit: safeSumStringNumbers(valA.profit, valB.profit)!,
+  };
+}
+
+function safeMergeCryptoSellsSum(
+  a: CryptoSellsSum | undefined,
+  b: CryptoSellsSum | undefined,
+): CryptoSellsSum | undefined {
+  if (a === undefined && b === undefined) {
+    return undefined;
+  }
+
+  const defaultSellsSum: CryptoSellsSum = { sellValue: "0", buyValue: "0", profit: "0" };
   const valA = a || defaultSellsSum;
   const valB = b || defaultSellsSum;
 
@@ -74,6 +94,7 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
         dividends: safeMergeArrays(prev.dividends, curr.dividends),
         mergers: safeMergeArrays(prev.mergers, curr.mergers),
         unregulatedSellsSum: safeMergeUnregulatedSellsSum(prev.unregulatedSellsSum, curr.unregulatedSellsSum),
+        cryptoSellsSum: safeMergeCryptoSellsSum(prev.cryptoSellsSum, curr.cryptoSellsSum),
         regulatedSellsSum: safeMergeRegulatedSellsSum(prev.regulatedSellsSum, curr.regulatedSellsSum),
         interestsSum: safeSumStringNumbers(prev.interestsSum, curr.interestsSum),
         cashbacksSum: safeSumStringNumbers(prev.cashbacksSum, curr.cashbacksSum),
@@ -84,6 +105,7 @@ export function mergeStockData(stockDataArray: StockData[]): StockData {
       dividends: undefined,
       mergers: undefined,
       unregulatedSellsSum: undefined,
+      cryptoSellsSum: undefined,
       regulatedSellsSum: undefined,
       interestsSum: undefined,
       cashbacksSum: undefined,
